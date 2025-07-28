@@ -35,11 +35,9 @@ car_data = car_data[colunas]
 # Gerando o dashboard
 # Área dos dados.
 st.title('Análise de Carros Americanos')
-st.markdown
 st.header('Data Viewer')
 st.subheader('Todos os dados dos carros')
 st.dataframe(car_data)
-st.markdown('---')
 
 # Quantidade de carros tipos por fabricante Histograma
 st.header('Tipos de carros por fabricantes')
