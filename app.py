@@ -44,7 +44,7 @@ if hist_chart:
                             x='manufacturer',
                             y='days_listed',
                             color='type',
-                            labels={'manufacturer': 'Fabricantes', 'sum of days_listed': 'Quantidade'})
+                            labels={'manufacturer': 'Fabricantes', 'days_listed': 'Quantidade'})
     st.plotly_chart(fig_hist)
 
 # Distribuição da Condição dos carros por ano
@@ -75,7 +75,7 @@ if fuel_hist:
                                 y='manufacturer',
                                 color='type',
                                 title='histograma dos combustíveis',
-                                labels={'fuel': 'Combustível', 'manufacturer': 'Fabricante'})
+                                labels={'fuel': 'Combustível', y : 'Fabricante'})
     st.plotly_chart(fig_fuel_hist)
 
 if fuel_scatt:
