@@ -69,7 +69,7 @@ fuel_scatt = st.checkbox('Distribuição')
 # Gerando os gráfico de acordo com a escolha
 if fuel_hist:
     st.write('Criando um histograma')
-    fig_fuel_hist = px.histogram(fuel_hist_group,
+    fig_fuel_hist = px.histogram(car_data,
                                 x='fuel',
                                 y='manufacturer',
                                 histnorm= 'percent',
