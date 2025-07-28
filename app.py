@@ -36,7 +36,6 @@ st.dataframe(car_data)
 # Quantidade de carros tipos por fabricante Histograma. GRAFICO 1
 st.header('Tipos de carros por fabricantes')
 hist_chart = st.button('Histograma')
-type_manufacturer = car_data.groupby(['manufacturer', 'type'])['days_listed'].count().reset_index()
 
 if hist_chart:
     st.write('Histograma quantidade de carros por fabricantes')
@@ -65,7 +64,6 @@ if scatter_chart:
 st.header('Tipos de combustíveis')
 st.write('Como gostaria de ver os dados: ')
 fuel_hist = st.checkbox('Histograma')
-fuel_hist_group = car_data.groupby(['fuel', 'type'])['manufacturer'].count().reset_index()
 fuel_scatt = st.checkbox('Distribuição')
 
 # Gerando os gráfico de acordo com a escolha
@@ -74,7 +72,7 @@ if fuel_hist:
     fig_fuel_hist = px.histogram(fuel_hist_group,
                                 x='fuel',
                                 y='manufacturer',
-                                histfunc='count',
+                                histnorm= 'percent',
                                 color='type',
                                 title='histograma dos combustíveis',
                                 labels={'fuel': 'Combustível', 'manufacturer': 'Fabricante'})
