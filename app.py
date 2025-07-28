@@ -74,7 +74,6 @@ if fuel_hist:
                                 x='fuel',
                                 y='manufacturer',
                                 color='type',
-                                histnorm='count',
                                 title='histograma dos combustíveis',
                                 labels={'fuel': 'Combustível', 'manufacturer': 'Fabricante'})
     st.plotly_chart(fig_fuel_hist)
