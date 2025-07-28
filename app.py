@@ -6,13 +6,6 @@ import streamlit as st
 # Carregando o Dataframe vehicles.csv
 car_data = pd.read_csv('vehicles.csv')
 
-# Coluna model_year
-car_data['model_year'] = car_data['model_year'].fillna(9999)
-car_data['model_year'] = car_data['model_year'].astype(int)
-
-# Coluna cylinders
-car_data['cylinders'] = car_data['cylinders'].fillna(0)
-
 # Coluna odometer
 car_data['odometer'] = car_data['odometer'].fillna(car_data['odometer'].median()).astype(int)
 
@@ -34,9 +27,9 @@ car_data = car_data[colunas]
 
 # Gerando o dashboard
 # Área dos dados.
-st.title('Análise de Carros Americanos')
-st.header('Data Viewer')
-st.subheader('Todos os dados dos carros')
+st.title('Dados de Carros Americanos')
+st.header('Visualização dos dados')
+st.subheader('Carros Americanos')
 st.dataframe(car_data)
 
 # Quantidade de carros tipos por fabricante Histograma
@@ -45,8 +38,12 @@ hist_chart = st.button('Histograma')
 type_manufacturer = car_data.groupby(['manufacturer', 'type'])['days_listed'].count().reset_index()
 
 if hist_chart:
-    st.write('Criando um histograma para o conjunto de dados de anúncios de vendas de carros.')
-    fig_hist = px.histogram(type_manufacturer, x='manufacturer', y='days_listed', color='type', title='Vehicles types by Manufacturer')
+    st.write('Histograma quantidade de carros por fabricantes')
+    fig_hist = px.histogram(type_manufacturer, 
+                            x='manufacturer', 
+                            y='days_listed', 
+                            color='type',
+                            labels={'x': 'Fabricantes', 'y': 'Quantidade'})
     st.plotly_chart(fig_hist)
 
 # Distribuição da Condição dos carros por ano
@@ -55,24 +52,26 @@ scatter_chart = st.button('Dispersão')
 
 if scatter_chart:
     st.write('Criando um gráfico de condição dos carros por ano')
-    fig_scatter = px.scatter(car_data, x='model_year', color='condition', title='vehicles types by manufacturer')
+    fig_scatter = px.scatter(car_data, x='model_year', color='condition')
     st.plotly_chart(fig_scatter)
 
 # Gerando uma checkbox para análise de tipos de combustíveis 
 st.header('Tipos de combustíveis')
-st.subheader('Escolha como deseja ver os dados: ')
+st.write('Como gostaria de ver os dados: ')
 fuel_hist = st.checkbox('Histograma')
 fuel_scatt = st.checkbox('Distribuição')
 
 # Gerando os gráfico de acordo com a escolha
 if fuel_hist:
     st.write('Criando um histograma')
-    fig_fuel_hist = px.histogram(car_data, x='fuel', color='type', histnorm='count', title='Combustíveis')
-    st.plotly_chart(fuel_hist)
+    fig_fuel_hist = px.histogram(car_data, x='fuel', color='type', histnorm='count', title='histograma dos combustíveis')
+    st.plotly_chart(fig_fuel_hist)
 
 if fuel_scatt:
     st.write('Criando um gráfico de distribuição')
     fig_fuel_scatt = px.scatter(car_data, x='model_year', y='manufacturer', color='fuel', title='Distribuição dos combustíveis')
+    st.plotly_chart(fig_fuel_scatt)
+
 
 # Comparação da distribuição de preços 
 st.header('Escolha dois fabricantes e compare seus preços')
@@ -82,7 +81,7 @@ fabricante_1 = car_data['manufacturer'].unique().tolist()
 choice_1 = st.selectbox('Selecione um fabricante: ', options=fabricante_1)
 
 # Excluindo a primeira opção da lista para segunda seleção
-fabricante_2 = [car for car in fabricante_1 if car != fabricante_1]
+fabricante_2 = [car for car in fabricante_1 if car != choice_1]
 
 # Gerando um segunda escolha de fabricante
 choice_2 = st.selectbox('Selecione outro fabricante: ', options=fabricante_2)
@@ -96,5 +95,5 @@ car_data_2 = pd.concat([car_data_fab1, car_data_fab2])
 
 # Gerando um histograma baseado nas opções
 st.write('Criando um Histograma baseado nas fabricantes selecionadas')
-fig_choices = px.histogram(car_data_2, x='price', color='manufacturer', histnorm='percent')
+fig_choices = px.histogram(car_data_2, x='price', color='manufacturer', histnorm='percent', labels={'x': 'Preços', 'y': 'Porcentagens'})
 st.plotly_chart(fig_choices)
