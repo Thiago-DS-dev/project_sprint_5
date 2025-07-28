@@ -7,7 +7,8 @@ import streamlit as st
 car_data = pd.read_csv('vehicles.csv')
 
 # Coluna odometer
-car_data['odometer'] = car_data['odometer'].fillna(car_data['odometer'].median()).astype(int)
+car_data['odometer'] = car_data['odometer'].fillna(car_data['odometer'].median())
+car_data['odometer'] = car_data['odometer'].astype(int)
 
 # Coluna paint_color
 car_data['paint_color'] = car_data['paint_color'].fillna('unknown')
@@ -39,11 +40,11 @@ type_manufacturer = car_data.groupby(['manufacturer', 'type'])['days_listed'].co
 
 if hist_chart:
     st.write('Histograma quantidade de carros por fabricantes')
-    fig_hist = px.histogram(type_manufacturer, 
-                            x='manufacturer', 
-                            y='days_listed', 
+    fig_hist = px.histogram(type_manufacturer,
+                            x='manufacturer',
+                            y='days_listed',
                             color='type',
-                            labels={'manufacturer': 'Fabricantes', 'y': 'Quantidade'})
+                            labels={'manufacturer': 'Fabricantes', 'sum of days_listed': 'Quantidade'})
     st.plotly_chart(fig_hist)
 
 # Distribuição da Condição dos carros por ano
@@ -52,28 +53,43 @@ scatter_chart = st.button('Dispersão')
 
 if scatter_chart:
     st.write('Criando um gráfico de condição dos carros por ano')
-    fig_scatter = px.scatter(car_data, x='model_year', y='price', color='condition')
+    fig_scatter = px.scatter(car_data,
+                            x='model_year',
+                            y='price',
+                            color='condition',
+                            labels={'model_year': 'Ano do modelo', 'price': 'Valor'})
     st.plotly_chart(fig_scatter)
 
-# Gerando uma checkbox para análise de tipos de combustíveis 
+# Gerando uma checkbox para análise de tipos de combustíveis
 st.header('Tipos de combustíveis')
 st.write('Como gostaria de ver os dados: ')
 fuel_hist = st.checkbox('Histograma')
+fuel_hist_group = car_data.groupby(['fuel', 'type'])['manufacturer'].count().reset_index()
 fuel_scatt = st.checkbox('Distribuição')
 
 # Gerando os gráfico de acordo com a escolha
 if fuel_hist:
     st.write('Criando um histograma')
-    fig_fuel_hist = px.histogram(car_data, x='fuel', y='manufacturer', color='type', histnorm='count', title='histograma dos combustíveis')
+    fig_fuel_hist = px.histogram(fuel_hist_group,
+                                x='fuel',
+                                y='manufacturer',
+                                color='type',
+                                histnorm='count',
+                                title='histograma dos combustíveis',
+                                labels={'fuel': 'Combustível', 'manufacturer': 'Fabricante'})
     st.plotly_chart(fig_fuel_hist)
 
 if fuel_scatt:
     st.write('Criando um gráfico de distribuição')
-    fig_fuel_scatt = px.scatter(car_data, x='model_year', y='manufacturer', color='fuel', title='Distribuição dos combustíveis')
+    fig_fuel_scatt = px.scatter(car_data,
+                                x='manufacturer',
+                                y='price',
+                                color='fuel',
+                                title='Distribuição dos combustíveis',
+                                labels={'manufacturer': 'Fabricante', 'price': 'Valor'})
     st.plotly_chart(fig_fuel_scatt)
 
-
-# Comparação da distribuição de preços 
+# Comparação da distribuição de preços
 st.header('Escolha dois fabricantes e compare seus preços')
 fabricante_1 = car_data['manufacturer'].unique().tolist()
 
@@ -95,5 +111,9 @@ car_data_2 = pd.concat([car_data_fab1, car_data_fab2])
 
 # Gerando um histograma baseado nas opções
 st.write('Criando um Histograma baseado nas fabricantes selecionadas')
-fig_choices = px.histogram(car_data_2, x='price', color='manufacturer', histnorm='percent', labels={'x': 'Preços', 'y': 'Porcentagens'})
+fig_choices = px.histogram(car_data_2,
+                        x='price',
+                        color='manufacturer',
+                        histnorm='percent',
+                        labels={'price': 'Valor', 'percent': 'Porcentagem'})
 st.plotly_chart(fig_choices)
