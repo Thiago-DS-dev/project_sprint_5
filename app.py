@@ -40,9 +40,10 @@ type_manufacturer = car_data.groupby(['manufacturer', 'type'])['days_listed'].co
 
 if hist_chart:
     st.write('Histograma quantidade de carros por fabricantes')
-    fig_hist = px.histogram(type_manufacturer,
+    fig_hist = px.histogram(car_data,
                             x='manufacturer',
                             y='days_listed',
+                            histfunc='count',
                             color='type',
                             labels={'manufacturer': 'Fabricantes', 'days_listed': 'Quantidade'})
     st.plotly_chart(fig_hist)
@@ -73,9 +74,10 @@ if fuel_hist:
     fig_fuel_hist = px.histogram(fuel_hist_group,
                                 x='fuel',
                                 y='manufacturer',
+                                histfunc='count',
                                 color='type',
                                 title='histograma dos combustíveis',
-                                labels={'fuel': 'Combustível', y : 'Fabricante'})
+                                labels={'fuel': 'Combustível', 'manufacturer': 'Fabricante'})
     st.plotly_chart(fig_fuel_hist)
 
 if fuel_scatt:
@@ -114,5 +116,5 @@ fig_choices = px.histogram(car_data_2,
                         x='price',
                         color='manufacturer',
                         histnorm='percent',
-                        labels={'price': 'Valor', 'percent': 'Porcentagem'})
+                        labels={'price': 'Valor', 'y': 'Porcentagem'})
 st.plotly_chart(fig_choices)
