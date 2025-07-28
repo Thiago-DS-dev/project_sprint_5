@@ -46,7 +46,7 @@ type_manufacturer = car_data.groupby(['manufacturer', 'type'])['days_listed'].co
 
 if hist_chart:
     st.write('Criando um histograma para o conjunto de dados de anúncios de vendas de carros.')
-    fig_hist = px.histogram(car_data, x='manufacturer', y='days_listed' color='type', title='Vehicles types by Manufacturer')
+    fig_hist = px.histogram(type_manufacturer, x='manufacturer', y='days_listed' color='type', title='Vehicles types by Manufacturer')
     st.plotly_chart(fig_hist)
 
 # Distribuição da Condição dos carros por ano
