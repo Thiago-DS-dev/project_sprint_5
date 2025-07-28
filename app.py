@@ -33,7 +33,7 @@ st.header('Visualização dos dados')
 st.subheader('Carros Americanos')
 st.dataframe(car_data)
 
-# Quantidade de carros tipos por fabricante Histograma. GRAFICO 1
+# Quantidade de carros tipos por fabricante Histograma
 st.header('Tipos de carros por fabricantes')
 hist_chart = st.button('Histograma')
 
@@ -60,22 +60,22 @@ if scatter_chart:
                             labels={'model_year': 'Ano do modelo', 'price': 'Valor'})
     st.plotly_chart(fig_scatter)
 
-# Gerando uma checkbox para análise de tipos de combustíveis
+# Gerando uma checkbox para análise dos tipos de combustíveis
 st.header('Tipos de combustíveis')
 st.write('Como gostaria de ver os dados: ')
 fuel_hist = st.checkbox('Histograma')
+fuel_hist_group = car_data.groupby(['fuel', 'type'])['manufacturer'].count().reset_index()
 fuel_scatt = st.checkbox('Distribuição')
 
 # Gerando os gráfico de acordo com a escolha
 if fuel_hist:
     st.write('Criando um histograma')
-    fig_fuel_hist = px.histogram(car_data,
+    fig_fuel_hist = px.histogram(fuel_hist_group,
                                 x='fuel',
                                 y='manufacturer',
-                                histnorm= 'percent',
                                 color='type',
                                 title='histograma dos combustíveis',
-                                labels={'fuel': 'Combustível', 'manufacturer': 'Fabricante'})
+                                labels={'fuel': 'Combustível'})
     st.plotly_chart(fig_fuel_hist)
 
 if fuel_scatt:
